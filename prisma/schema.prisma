@@ -9,3 +9,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  order     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
