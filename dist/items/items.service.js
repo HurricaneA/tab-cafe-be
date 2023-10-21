@@ -53,7 +53,9 @@ let ItemsService = class ItemsService {
                     name: updateItemDto.name,
                     price: updateItemDto.price,
                     type: updateItemDto.type,
-                    isAvailable: updateItemDto.isAvailable,
+                    ...(updateItemDto.isAvailable && {
+                        isAvailable: updateItemDto.isAvailable,
+                    }),
                 },
             });
         }

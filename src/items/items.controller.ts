@@ -33,6 +33,7 @@ export class ItemsController {
   }
 
   @Patch(':id')
+  @HttpCode(201)
   update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
     return this.itemsService.update(+id, updateItemDto);
   }

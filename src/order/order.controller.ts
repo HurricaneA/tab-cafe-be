@@ -32,6 +32,7 @@ export class OrderController {
   }
 
   @Patch(':id')
+  @HttpCode(201)
   update(@Param('id') id: string) {
     return this.orderService.updatedCompletedStatus(+id);
   }
