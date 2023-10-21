@@ -7,6 +7,9 @@ export class CreateItemDto {
   @IsNumber()
   price: number;
 
+  @IsString()
+  type: string;
+
   @IsBoolean()
   @IsOptional()
   isAvailable: boolean;

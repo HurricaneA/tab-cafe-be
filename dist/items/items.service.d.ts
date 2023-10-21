@@ -8,6 +8,7 @@ export declare class ItemsService {
     findAll(): Promise<{
         id: number;
         name: string;
+        type: string;
         price: number;
         isAvailable: boolean;
         createdAt: Date;

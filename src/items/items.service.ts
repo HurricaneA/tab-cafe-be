@@ -13,6 +13,7 @@ export class ItemsService {
         data: {
           name: createItemDto.name,
           price: createItemDto.price,
+          type: createItemDto.type,
           isAvailable: createItemDto.isAvailable,
         },
       });
@@ -44,6 +45,7 @@ export class ItemsService {
         data: {
           name: updateItemDto.name,
           price: updateItemDto.price,
+          type: updateItemDto.type,
           isAvailable: updateItemDto.isAvailable,
         },
       });
