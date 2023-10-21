@@ -14,6 +14,9 @@ export class ItemsDto {
 
   @IsNumber()
   quantity: number;
+
+  @IsNumber()
+  unitPrice: number;
 }
 
 export class CreateOrderDto {
