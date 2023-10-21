@@ -11,9 +11,7 @@ export class OrderService {
     try {
       await this.prismaService.order.create({
         data: {
-          order: {
-            ...(createOrderDto as any),
-          },
+          order: createOrderDto.items as any,
         },
       });
     } catch (error) {
