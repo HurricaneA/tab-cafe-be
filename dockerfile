@@ -12,7 +12,7 @@ RUN npm install
 # Copy the application source into the container.
 COPY . .
 
-# Build the application.
+#  Build the application.
 RUN npm run build
 
 # Uninstall the dependencies not required to run the built application.
