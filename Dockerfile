@@ -12,10 +12,11 @@ RUN npm install
 # Copy the application source into the container.
 COPY . .
 
+RUN npx prisma generate
+
 #  Build the application.
 RUN npm run build
 
-RUN npx prisma generate
 
 # Uninstall the dependencies not required to run the built application.
 RUN npm prune --production
