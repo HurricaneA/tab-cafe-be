@@ -22,7 +22,8 @@ model Item {
 
 model Order {
   id        Int      @id @default(autoincrement())
-  order     Json?
+  orders     Json?
+  isCompleted Boolean? @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

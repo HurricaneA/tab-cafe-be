@@ -23,19 +23,17 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], ItemsDto.prototype, "quantity", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ItemsDto.prototype, "unitPrice", void 0);
 class CreateOrderDto {
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
-    (0, class_validator_1.IsNotEmptyObject)(),
-    (0, class_validator_1.IsObject)(),
-    (0, class_validator_1.IsDefined)(),
-    (0, class_validator_1.ValidateNested)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => ItemsDto),
     __metadata("design:type", Array)
 ], CreateOrderDto.prototype, "items", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateOrderDto.prototype, "total", void 0);
 //# sourceMappingURL=create-order.dto.js.map

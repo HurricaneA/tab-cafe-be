@@ -20,9 +20,7 @@ let OrderService = class OrderService {
         try {
             await this.prismaService.order.create({
                 data: {
-                    order: {
-                        ...createOrderDto,
-                    },
+                    orders: createOrderDto.items,
                 },
             });
         }
@@ -42,8 +40,28 @@ let OrderService = class OrderService {
     findOne(id) {
         return `This action returns a #${id} order`;
     }
-    update(id, updateOrderDto) {
-        return `This action updates a #${id} order`;
+    async updatedCompletedStatus(id) {
+        try {
+            const order = await this.prismaService.order.findUniqueOrThrow({
+                where: {
+                    id,
+                },
+                select: {
+                    isCompleted: true,
+                },
+            });
+            await this.prismaService.order.update({
+                where: {
+                    id,
+                },
+                data: {
+                    isCompleted: !order.isCompleted,
+                },
+            });
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error, 'Cannot update status!');
+        }
     }
     async remove(id) {
         try {

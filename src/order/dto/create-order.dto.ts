@@ -1,12 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsNotEmptyObject,
-  IsNumber,
-  IsObject,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export class ItemsDto {
   @IsString()
@@ -20,13 +13,8 @@ export class ItemsDto {
 }
 
 export class CreateOrderDto {
-  @IsNotEmptyObject()
-  @IsObject()
-  @IsDefined()
-  @ValidateNested()
+  @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => ItemsDto)
   items: ItemsDto[];
-
-  @IsNumber()
-  total: number;
 }

@@ -1,5 +1,4 @@
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma.service';
 export declare class OrderService {
     private readonly prismaService;
@@ -7,11 +6,12 @@ export declare class OrderService {
     create(createOrderDto: CreateOrderDto): Promise<void>;
     findAll(): Promise<{
         id: number;
-        order: import(".prisma/client").Prisma.JsonValue;
+        orders: import(".prisma/client").Prisma.JsonValue;
+        isCompleted: boolean;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
     findOne(id: number): string;
-    update(id: number, updateOrderDto: UpdateOrderDto): string;
+    updatedCompletedStatus(id: number): Promise<void>;
     remove(id: number): Promise<void>;
 }

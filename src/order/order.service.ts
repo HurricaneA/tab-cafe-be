@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class OrderService {
     try {
       await this.prismaService.order.create({
         data: {
-          order: createOrderDto.items as any,
+          orders: createOrderDto.items as any,
         },
       });
     } catch (error) {
@@ -33,8 +32,28 @@ export class OrderService {
     return `This action returns a #${id} order`;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async updatedCompletedStatus(id: number) {
+    try {
+      const order = await this.prismaService.order.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: {
+          isCompleted: true,
+        },
+      });
+
+      await this.prismaService.order.update({
+        where: {
+          id,
+        },
+        data: {
+          isCompleted: !order.isCompleted,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(error, 'Cannot update status!');
+    }
   }
 
   async remove(id: number) {
