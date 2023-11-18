@@ -16,6 +16,7 @@ exports.OrderController = void 0;
 const common_1 = require("@nestjs/common");
 const order_service_1 = require("./order.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
+const platform_express_1 = require("@nestjs/platform-express");
 let OrderController = class OrderController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -28,6 +29,9 @@ let OrderController = class OrderController {
     }
     findOne(id) {
         return this.orderService.findOne(+id);
+    }
+    uploadPDF(file, body) {
+        return this.orderService.uploadPDF(file, Number(body.orderId));
     }
     update(id) {
         return this.orderService.updatedCompletedStatus(+id);
@@ -58,6 +62,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], OrderController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)('pdf'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [File, Object]),
+    __metadata("design:returntype", void 0)
+], OrderController.prototype, "uploadPDF", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.HttpCode)(201),

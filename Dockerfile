@@ -23,7 +23,7 @@ RUN npm prune --production
 
 # Initiate a new container to run the application in.
 FROM node:16
-  ENV NODE_ENV=production
+ENV NODE_ENV=production
 WORKDIR /usr/src/app
 
 # Copy everything required to run the built application into the new container.
@@ -32,7 +32,7 @@ COPY --from=builder /usr/src/app/node_modules/ ./node_modules/
 COPY --from=builder /usr/src/app/dist/ ./dist/
 
 # Expose the web server's port.
-EXPOSE 3000
+EXPOSE 4040
 
 # Run the application.
 CMD ["node", "dist/main"]

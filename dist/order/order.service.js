@@ -8,13 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
+const nestjs_s3_1 = require("nestjs-s3");
+const client_s3_1 = require("@aws-sdk/client-s3");
+const config_1 = require("@nestjs/config");
 let OrderService = class OrderService {
-    constructor(prismaService) {
+    constructor(prismaService, configService, s3Client) {
         this.prismaService = prismaService;
+        this.configService = configService;
+        this.s3Client = s3Client;
     }
     generateRandomId() {
         return Math.floor(Math.random() * Date.now());
@@ -35,8 +43,27 @@ let OrderService = class OrderService {
     }
     async findAll() {
         try {
-            const orders = await this.prismaService.order.findMany({});
-            return orders;
+            const orders = await this.prismaService.order.findMany({
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            });
+            const refactoredOrders = [];
+            orders.forEach((order) => {
+                let total = 0;
+                const orderList = order.orders.map((item) => {
+                    const subTotal = item.quantity * item.unitPrice;
+                    total = total + subTotal;
+                    return {
+                        ...item,
+                        subTotal: subTotal,
+                    };
+                });
+                order.orders = orderList;
+                order['total'] = total;
+                refactoredOrders.push(order);
+            });
+            return refactoredOrders;
         }
         catch (error) {
             throw new common_1.BadRequestException(error, 'Cannot fetch orders!');
@@ -80,10 +107,41 @@ let OrderService = class OrderService {
             throw new common_1.BadRequestException(error, 'Cannot delete orders!');
         }
     }
+    async uploadPDF(file, orderId) {
+        console.log(file);
+        return await this.s3Client
+            .send(new client_s3_1.PutObjectCommand({
+            Body: file.buffer,
+            ACL: 'public-read',
+            Bucket: this.configService.get('S3_BUCKET'),
+            Key: file.originalname,
+            ContentEncoding: 'base64',
+            ContentType: `application/pdf`,
+        }))
+            .then(async () => {
+            const receiptLink = `${this.configService.get('S3_API_URL')}/tabcafe/${file.originalname}`;
+            const isUpdated = await this.prismaService.order.update({
+                where: {
+                    id: orderId,
+                },
+                data: {
+                    receiptLink: receiptLink,
+                },
+            });
+            return {
+                downloadLink: isUpdated.receiptLink,
+            };
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    }
 };
 exports.OrderService = OrderService;
 exports.OrderService = OrderService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __param(2, (0, nestjs_s3_1.InjectS3)()),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        config_1.ConfigService, Object])
 ], OrderService);
 //# sourceMappingURL=order.service.js.map

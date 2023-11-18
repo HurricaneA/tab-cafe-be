@@ -12,12 +12,36 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const items_module_1 = require("./items/items.module");
 const order_module_1 = require("./order/order.module");
+const nestjs_s3_1 = require("nestjs-s3");
+const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [items_module_1.ItemsModule, order_module_1.OrderModule],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
+            nestjs_s3_1.S3Module.forRootAsync({
+                imports: [],
+                useFactory: (configService) => ({
+                    config: {
+                        credentials: {
+                            accessKeyId: configService.get('S3_ACCESS_KEY'),
+                            secretAccessKey: configService.get('S3_SECRET_KEY'),
+                        },
+                        endpoint: configService.get('S3_API_URL'),
+                        region: 'eu-north-1',
+                        forcePathStyle: true,
+                        signatureVersion: 'v4',
+                    },
+                }),
+                inject: [config_1.ConfigService],
+            }),
+            items_module_1.ItemsModule,
+            order_module_1.OrderModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

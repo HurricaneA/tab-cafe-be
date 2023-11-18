@@ -7,9 +7,12 @@ import {
   Param,
   Delete,
   HttpCode,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('orders')
 export class OrderController {
@@ -29,6 +32,12 @@ export class OrderController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.orderService.findOne(+id);
+  }
+
+  @Post('pdf')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadPDF(@UploadedFile() file: File, @Body() body: { orderId: string }) {
+    return this.orderService.uploadPDF(file, Number(body.orderId));
   }
 
   @Patch(':id')
