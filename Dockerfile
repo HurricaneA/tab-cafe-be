@@ -1,5 +1,5 @@
 # Initiate a container to build the application in.
-FROM node:16 as builder
+FROM node:20 as builder
 ENV NODE_ENV=build
 WORKDIR /usr/src/app
 
@@ -22,7 +22,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Initiate a new container to run the application in.
-FROM node:16
+FROM node:20
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
 
@@ -32,7 +32,7 @@ COPY --from=builder /usr/src/app/node_modules/ ./node_modules/
 COPY --from=builder /usr/src/app/dist/ ./dist/
 
 # Expose the web server's port.
-EXPOSE 4040
+EXPOSE 3000
 
 # Run the application.
 CMD ["node", "dist/main"]
