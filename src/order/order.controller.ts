@@ -36,7 +36,7 @@ export class OrderController {
 
   @Post('pdf')
   @UseInterceptors(FileInterceptor('file'))
-  uploadPDF(@UploadedFile() file: File, @Body() body: { orderId: string }) {
+  uploadPDF(@UploadedFile() file: any, @Body() body: { orderId: string }) {
     return this.orderService.uploadPDF(file, Number(body.orderId));
   }
 
