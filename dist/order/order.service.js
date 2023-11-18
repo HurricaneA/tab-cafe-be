@@ -16,11 +16,16 @@ let OrderService = class OrderService {
     constructor(prismaService) {
         this.prismaService = prismaService;
     }
+    generateRandomId() {
+        return Math.floor(Math.random() * Date.now());
+    }
     async create(createOrderDto) {
         try {
+            const randomId = this.generateRandomId();
             await this.prismaService.order.create({
                 data: {
                     orders: createOrderDto.items,
+                    randomId: randomId.toString(),
                 },
             });
         }

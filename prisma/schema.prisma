@@ -24,6 +24,8 @@ model Order {
   id        Int      @id @default(autoincrement())
   orders     Json?
   isCompleted Boolean? @default(false)
+  randomId String?
+  receiptLink String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

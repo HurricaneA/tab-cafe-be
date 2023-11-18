@@ -6,11 +6,17 @@ import { PrismaService } from 'src/prisma.service';
 export class OrderService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  generateRandomId() {
+    return Math.floor(Math.random() * Date.now());
+  }
+
   async create(createOrderDto: CreateOrderDto) {
     try {
+      const randomId = this.generateRandomId();
       await this.prismaService.order.create({
         data: {
           orders: createOrderDto.items as any,
+          randomId: randomId.toString(),
         },
       });
     } catch (error) {

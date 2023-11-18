@@ -8,6 +8,8 @@ export declare class OrderController {
         id: number;
         orders: import(".prisma/client").Prisma.JsonValue;
         isCompleted: boolean;
+        randomId: string;
+        receiptLink: string;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
