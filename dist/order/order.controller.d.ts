@@ -6,7 +6,7 @@ export declare class OrderController {
     create(createOrderDto: CreateOrderDto): Promise<void>;
     findAll(): Promise<any[]>;
     findOne(id: string): string;
-    uploadPDF(file: File, body: {
+    uploadPDF(file: any, body: {
         orderId: string;
     }): Promise<void | {
         downloadLink: string;

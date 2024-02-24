@@ -108,7 +108,6 @@ let OrderService = class OrderService {
         }
     }
     async uploadPDF(file, orderId) {
-        console.log(file);
         return await this.s3Client
             .send(new client_s3_1.PutObjectCommand({
             Body: file.buffer,
@@ -133,7 +132,7 @@ let OrderService = class OrderService {
             };
         })
             .catch((err) => {
-            console.log(err);
+            console.log('error is', err);
         });
     }
 };

@@ -20,7 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             secretAccessKey: configService.get<string>('S3_SECRET_KEY'),
           },
           endpoint: configService.get<string>('S3_API_URL'),
-          region: 'eu-north-1',
+          region: 'us-east-1',
           forcePathStyle: true,
           signatureVersion: 'v4',
         },

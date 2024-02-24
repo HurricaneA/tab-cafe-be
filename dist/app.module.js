@@ -32,7 +32,7 @@ exports.AppModule = AppModule = __decorate([
                             secretAccessKey: configService.get('S3_SECRET_KEY'),
                         },
                         endpoint: configService.get('S3_API_URL'),
-                        region: 'eu-north-1',
+                        region: 'us-east-1',
                         forcePathStyle: true,
                         signatureVersion: 'v4',
                     },
